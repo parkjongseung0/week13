@@ -199,13 +199,33 @@ TetrisState Tetris::accept(char key) {
 
     switch (key) { // perform the requested action
       case 'a': left--; break;
+      case 'j': left--; break;
       case 'd': left++; break;
+      case 'l': left++; break;
       case 'w': 
         degree = (degree + 1) % numDegrees; 
         currBlk = setOfBlockObjects[type][degree]; 
         break;
       case 's': top++; break;
+      case 'i': 
+        degree = (degree + 1) % numDegrees; 
+        currBlk = setOfBlockObjects[type][degree]; 
+        break;
+      case 'k': top++; break;
       case ' ': 
+        while (true) {
+          top++;
+          tempBlk = iScreen->clip(top, left, top + currBlk->get_dy(), left + currBlk->get_dx());
+          tempBlk2 = tempBlk->add(currBlk);
+          delete tempBlk;
+          if (tempBlk2->anyGreaterThan(1)) {
+            delete tempBlk2;
+            break;
+          }
+          delete tempBlk2;
+        }
+        break;
+      case '\r': 
         while (true) {
           top++;
           tempBlk = iScreen->clip(top, left, top + currBlk->get_dy(), left + currBlk->get_dx());
@@ -227,13 +247,21 @@ TetrisState Tetris::accept(char key) {
     if (tempBlk2->anyGreaterThan(1)) {
       switch (key) { // undo the requested action
         case 'a': left++; break;
+        case 'j': left++; break;
         case 'd': left--; break;
+        case 'l': left--; break;
         case 'w': 
           degree = (degree + 3) % numDegrees; 
           currBlk = setOfBlockObjects[type][degree]; 
           break;
+        case 'i': 
+          degree = (degree + 3) % numDegrees; 
+          currBlk = setOfBlockObjects[type][degree]; 
+          break;
         case 's': top--; touchDown = true; break;
+        case 'k': top--; touchDown = true; break;
         case ' ': top--; touchDown = true; break;
+        case '\r': top--; touchDown = true; break;
       }
       delete tempBlk2;
       tempBlk = iScreen->clip(top, left, top + currBlk->get_dy(), left + currBlk->get_dx());

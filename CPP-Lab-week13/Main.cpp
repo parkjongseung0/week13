@@ -302,13 +302,13 @@ int main(int argc, char *argv[]) {
   }
   else {
     cout << "usage: " << argv[0] << " [normal/record/replay]" << endl;
-    exit(1);
+    exit(1);  
   }
 
 
   char key;
-  registerAlarm(); // register one-second timer
-  srand((unsigned int)time(NULL)); // init the random number generator
+  // // registerAlarm(); // register one-second timer
+  // srand((unsigned int)time(NULL)); // init the random number generator
 
   init_screen();
 
@@ -322,24 +322,42 @@ int main(int argc, char *argv[]) {
   TetrisState state;
   CTetris::init(setOfColorBlockArrays, MAX_BLK_TYPES, MAX_BLK_DEGREES);
   CTetris *board = new CTetris(10, 10);
+  CTetris *board2 = new CTetris(10, 10);
   key = getTetrisKey(TetrisState::NewBlock, fromUser, toFile);
   state = board->accept(key);
-  drawScreen(board->get_oScreen(), board->get_wallDepth(), &left_win); 
-  drawScreen(board->get_oCScreen(), board->get_wallDepth(), &rght_win); 
-
+  state = board2->accept(key);
+  drawScreen(board->get_oCScreen(), board->get_wallDepth(), &left_win); 
+  // drawScreen(board->get_oCScreen(), board->get_wallDepth(), &rght_win); 
+  // drawScreen(board2->get_oCScreen(), board2->get_wallDepth(), &left_win); 
+  drawScreen(board2->get_oCScreen(), board2->get_wallDepth(), &rght_win);
+  
   while ((key = getTetrisKey(state, fromUser, toFile)) != 'q') {
-    state = board->accept(key);
-    drawScreen(board->get_oScreen(), board->get_wallDepth(), &left_win); 
-    drawScreen(board->get_oCScreen(), board->get_wallDepth(), &rght_win); 
-    if (state == TetrisState::NewBlock) {
-      key = getTetrisKey(state, fromUser, toFile);
+    if (key == 'a'|| key == 's'|| key == 'd'||key == 'w'||key == ' '){
       state = board->accept(key);
-      drawScreen(board->get_oScreen(), board->get_wallDepth(), &left_win); 
-      drawScreen(board->get_oCScreen(), board->get_wallDepth(), &rght_win); 
-      if (state == TetrisState::Finished) 
-        break;
+      drawScreen(board->get_oCScreen(), board->get_wallDepth(), &left_win); 
+      if (state == TetrisState::NewBlock) {
+        key = getTetrisKey(state, fromUser, toFile);
+        state = board->accept(key);
+        drawScreen(board->get_oCScreen(), board->get_wallDepth(), &left_win);  
+        if (state == TetrisState::Finished) 
+          break;
+      }
     }
+    else if (key == 'j'|| key == 'k'|| key == 'l'||key == 'i'||key == '\r' ){
+      state = board2->accept(key);
+      drawScreen(board2->get_oCScreen(), board2->get_wallDepth(), &rght_win); 
+      if (state == TetrisState::NewBlock) {
+        key = getTetrisKey(state, fromUser, toFile);
+        state = board2->accept(key);
+        drawScreen(board2->get_oCScreen(), board2->get_wallDepth(), &rght_win); 
+        if (state == TetrisState::Finished) 
+          break;
+        }
+      }
   }
+
+    
+  
 
   if (infStream.is_open() == true) 
     infStream.close();

@@ -155,7 +155,7 @@ Matrix *deleteFullLines(Matrix *screen, Matrix *blk, int top, int dw) {
 }
 
 /// mutators
-TetrisState Tetris::accept(char key) {
+TetrisState Tetris::accept(char key, Matrix *in, Matrix **out) {
 
   if (state == TetrisState::Finished)
     return state;

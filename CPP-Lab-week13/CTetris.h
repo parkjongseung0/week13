@@ -25,5 +25,5 @@ public:
     Matrix *get_oCScreen(void) const {  return oCScreen; }
 
     // mutators
-    TetrisState accept(char key);
+    TetrisState accept(char key, Matrix *in, Matrix **out);
 };

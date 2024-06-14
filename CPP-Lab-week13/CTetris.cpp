@@ -61,10 +61,10 @@ CTetris::~CTetris() {
 }
 
 /// mutators
-TetrisState CTetris::accept(char key) {
+TetrisState CTetris::accept(char key, Matrix *in, Matrix **out) {
   Matrix *tempBlk, *tempBlk2;
 
-  TetrisState _state = Tetris::accept(key); // call superclass' function
+  TetrisState _state = Tetris::accept(key,in,out); // call superclass' function
 
   currCBlk = setOfColorBlockObjects[type][degree];
 

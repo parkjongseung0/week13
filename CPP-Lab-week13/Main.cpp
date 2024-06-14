@@ -323,9 +323,11 @@ int main(int argc, char *argv[]) {
   CTetris::init(setOfColorBlockArrays, MAX_BLK_TYPES, MAX_BLK_DEGREES);
   CTetris *board = new CTetris(10, 10);
   CTetris *board2 = new CTetris(10, 10);
+  Matrix* in = nullptr;  
+  Matrix* out = nullptr;
   key = getTetrisKey(TetrisState::NewBlock, fromUser, toFile);
-  state = board->accept(key);
-  state = board2->accept(key);
+  state = board->accept(key,in,&out);
+  state = board2->accept(key,in,&out);
   drawScreen(board->get_oCScreen(), board->get_wallDepth(), &left_win); 
   // drawScreen(board->get_oCScreen(), board->get_wallDepth(), &rght_win); 
   // drawScreen(board2->get_oCScreen(), board2->get_wallDepth(), &left_win); 
@@ -333,22 +335,22 @@ int main(int argc, char *argv[]) {
   
   while ((key = getTetrisKey(state, fromUser, toFile)) != 'q') {
     if (key == 'a'|| key == 's'|| key == 'd'||key == 'w'||key == ' '){
-      state = board->accept(key);
+      state = board->accept(key,in,&out);
       drawScreen(board->get_oCScreen(), board->get_wallDepth(), &left_win); 
       if (state == TetrisState::NewBlock) {
         key = getTetrisKey(state, fromUser, toFile);
-        state = board->accept(key);
+        state = board->accept(key,in,&out);
         drawScreen(board->get_oCScreen(), board->get_wallDepth(), &left_win);  
         if (state == TetrisState::Finished) 
           break;
       }
     }
     else if (key == 'j'|| key == 'k'|| key == 'l'||key == 'i'||key == '\r' ){
-      state = board2->accept(key);
+      state = board2->accept(key,in,&out);
       drawScreen(board2->get_oCScreen(), board2->get_wallDepth(), &rght_win); 
       if (state == TetrisState::NewBlock) {
         key = getTetrisKey(state, fromUser, toFile);
-        state = board2->accept(key);
+        state = board2->accept(key,in,&out);
         drawScreen(board2->get_oCScreen(), board2->get_wallDepth(), &rght_win); 
         if (state == TetrisState::Finished) 
           break;
@@ -356,8 +358,6 @@ int main(int argc, char *argv[]) {
       }
   }
 
-    
-  
 
   if (infStream.is_open() == true) 
     infStream.close();
@@ -370,6 +370,7 @@ int main(int argc, char *argv[]) {
   close_screen();
 
   delete board;
+  delete board2;
   CTetris::deinit();
   cout << "(nAlloc, nFree) = (" << Matrix::get_nAlloc() << ',' << Matrix::get_nFree() << ")" << endl;  
   cout << "Program terminated!" << endl;

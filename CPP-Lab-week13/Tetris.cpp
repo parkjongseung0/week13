@@ -123,7 +123,7 @@ Tetris::~Tetris() {
 }
 
 /// non-member functions
-Matrix *deleteFullLines(Matrix *screen, Matrix *blk, int top, int dw) {
+Matrix *deleteFullLines(Matrix *screen, Matrix *blk, int top, int dw,Matrix* in,Matrix** out) {
   Matrix *line, *bline, *zero, *temp;
   int cy, y;
   int nDeleted, nScanned;
@@ -275,7 +275,7 @@ TetrisState Tetris::accept(char key, Matrix *in, Matrix **out) {
     delete tempBlk2;
 
     if (touchDown) {
-      oScreen = deleteFullLines(oScreen, currBlk, top, wallDepth);
+      oScreen = deleteFullLines(oScreen, currBlk, top, wallDepth,in,out);
       iScreen->paste(oScreen, 0, 0);
       state = TetrisState::NewBlock;
     }

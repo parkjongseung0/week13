@@ -79,7 +79,7 @@ TetrisState CTetris::accept(char key, Matrix *in, Matrix **out) {
   delete tempBlk2;
 
   if (_state == TetrisState::NewBlock) {
-    oCScreen = deleteFullLines(oCScreen, currCBlk, top, wallDepth);
+    oCScreen = deleteFullLines(oCScreen, currCBlk, top, wallDepth,in,out);
     iCScreen->paste(oCScreen, 0, 0);
   }
   return _state;

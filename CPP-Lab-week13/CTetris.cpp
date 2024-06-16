@@ -78,14 +78,21 @@ TetrisState CTetris::accept(char key, Matrix *in, Matrix **out) {
   oCScreen->paste(iCScreen, 0, 0);
   oCScreen->paste(tempBlk2, top, left);
   delete tempBlk2;
+  Matrix **pout = out;
   
   if (_state == TetrisState::NewBlock) {
     oCScreen = deleteFullLines(oCScreen, currCBlk, top, wallDepth,in,del);
-    Matrix *temp = (*out)->clip(in->get_dy(), wallDepth, oCScreen->get_dy()-wallDepth, oCScreen->get_dx() + wallDepth);
-    (*out)->print();
-    //(*out)->paste(temp, 0, 0);
-    //(*out)->paste(in, oCScreen->get_dy()-wallDepth-in->get_dy(), wallDepth);
+    if(in->get_dx()==oCScreen->get_dx() - wallDepth*2){
+      Matrix *temp = (*pout)->clip(in->get_dy(), wallDepth, oCScreen->get_dy()-wallDepth, oCScreen->get_dx() - wallDepth);
+      (*pout)->paste(temp, 0, wallDepth);
+      (*pout)->paste(in, oCScreen->get_dy()-wallDepth-in->get_dy(),wallDepth);
+    }
     iCScreen->paste(oCScreen, 0, 0);
   }
+
+  Matrix *bscreen = iCScreen->int2bool();
+  iScreen->paste(bscreen,0,0);
+  delete bscreen;
+
   return _state;
 }

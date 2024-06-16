@@ -172,7 +172,7 @@ Matrix *deleteFullLines(Matrix *screen, Matrix *blk, int top, int dw,Matrix* in,
   }
 
 
-  in = box->clip(0, 0, height, ws_dx);
+  *in = box->clip(0, 0, height, ws_dx);
   
   delete box;
   delete zero;
@@ -302,8 +302,10 @@ TetrisState Tetris::accept(char key, Matrix *in, Matrix **out) {
     oScreen->paste(tempBlk2, top, left);
     delete tempBlk2;
 
+
     if (touchDown) {
       oScreen = deleteFullLines(oScreen, currBlk, top, wallDepth,in,del);
+      
 
       iScreen->paste(oScreen, 0, 0);
       state = TetrisState::NewBlock;

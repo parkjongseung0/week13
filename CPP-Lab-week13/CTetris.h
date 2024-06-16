@@ -23,7 +23,7 @@ public:
 
     // accessors
     Matrix *get_oCScreen(void) const {  return oCScreen; }
-    Matrix *get_iCSCreen(void) { return iCScreen;}
+    Matrix *get_iCSCreen(void) const { return iCScreen;}
 
     // mutators
     TetrisState accept(char key, Matrix *in, Matrix **out);

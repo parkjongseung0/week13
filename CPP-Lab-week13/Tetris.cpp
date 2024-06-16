@@ -160,8 +160,6 @@ Matrix *deleteFullLines(Matrix *screen, Matrix *blk, int top, int dw,Matrix* in,
 
   for (y = nScanned2 - 1 ; y >= 0; y--) {
     lenth = top + y;
-    cout<<count<<endl;;
-    cout<<count<<endl;;
     if (count%10==1){
       temp = del->clip(screen->get_dy()-dw-wall-1,dw,screen->get_dy()-dw-wall, dw + ws_dx);
       box->paste(temp,bcount,0);

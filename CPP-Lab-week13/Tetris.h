@@ -1,3 +1,4 @@
+
 #pragma once
 #include <iostream>
 #include <cstdlib>
@@ -11,7 +12,7 @@ enum class TetrisState {
     Finished,
 };
 
-extern Matrix *deleteFullLines(Matrix *screen, Matrix *blk, int top, int dw);
+extern Matrix *deleteFullLines(Matrix *screen, Matrix *blk, int top, int dw,Matrix* in, Matrix* del);
 //extern int *allocArrayScreen(int dy, int dx, int dw);
 //extern void deallocArrayScreen(int *array);
 
@@ -49,4 +50,6 @@ public:
 
     // mutators
     TetrisState accept(char key, Matrix *in, Matrix **out);
+
+    
 };

@@ -325,6 +325,7 @@ int main(int argc, char *argv[]) {
   CTetris *board2 = new CTetris(10, 10);
   Matrix* in = nullptr;  
   Matrix* out = nullptr;
+  out=new Matrix();
   key = getTetrisKey(TetrisState::NewBlock, fromUser, toFile);
   state = board->accept(key,in,&out);
   state = board2->accept(key,in,&out);
@@ -335,6 +336,7 @@ int main(int argc, char *argv[]) {
   
   while ((key = getTetrisKey(state, fromUser, toFile)) != 'q') {
     if (key == 'a'|| key == 's'|| key == 'd'||key == 'w'||key == ' '){
+      *out = board2->get_iCSCreen();
       state = board->accept(key,in,&out);
       drawScreen(board->get_oCScreen(), board->get_wallDepth(), &left_win); 
       if (state == TetrisState::NewBlock) {
@@ -346,6 +348,7 @@ int main(int argc, char *argv[]) {
       }
     }
     else if (key == 'j'|| key == 'k'|| key == 'l'||key == 'i'||key == '\r' ){
+      *out = board->get_iCSCreen();
       state = board2->accept(key,in,&out);
       drawScreen(board2->get_oCScreen(), board2->get_wallDepth(), &rght_win); 
       if (state == TetrisState::NewBlock) {

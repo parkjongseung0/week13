@@ -123,20 +123,22 @@ Tetris::~Tetris() {
 }
 
 /// non-member functions
-Matrix *deleteFullLines(Matrix *screen, Matrix *blk, int top, int dw,Matrix* in,Matrix** out) {
+Matrix *deleteFullLines(Matrix *screen, Matrix *blk, int top, int dw,Matrix* in, Matrix* del) {
   Matrix *line, *bline, *zero, *temp;
   int cy, y;
-  int nDeleted, nScanned;
+  int nDeleted, nScanned1,nScanned2 ;
   int ws_dy = screen->get_dy() - dw;
   int ws_dx = screen->get_dx() - 2*dw;
+  int lenth,count=0;
+  int wall=0;
+  int bcount=0,height=0;
 
   if (top + blk->get_dy() > ws_dy)
-    nScanned = ws_dy - top;
+    nScanned1=nScanned2 = ws_dy - top;
   else
-    nScanned = blk->get_dy();
-  
+    nScanned1=nScanned2 = blk->get_dy();
   zero = new Matrix(1, ws_dx);
-  for (y = nScanned - 1, nDeleted = 0; y >= 0; y--) {
+  for (y = nScanned1 - 1, nDeleted = 0; y >= 0; y--) {
     cy = top + y + nDeleted;
     line = screen->clip(cy, dw, cy+1, dw + ws_dx);
     bline = line->int2bool(); // binary version of line
@@ -146,10 +148,35 @@ Matrix *deleteFullLines(Matrix *screen, Matrix *blk, int top, int dw,Matrix* in,
       screen->paste(temp, 1, dw);
       screen->paste(zero, 0, dw);
       nDeleted++;
+      count=(count*10)+1;//
+      height++;
       delete temp;
     }
+    else
+      count = count*10;
     delete bline; 
   }
+  Matrix*box=new Matrix(height,ws_dx);
+
+  for (y = nScanned2 - 1 ; y >= 0; y--) {
+    lenth = top + y;
+    cout<<count<<endl;;
+    cout<<count<<endl;;
+    if (count%10==1){
+      temp = del->clip(screen->get_dy()-dw-wall-1,dw,screen->get_dy()-dw-wall, dw + ws_dx);
+      box->paste(temp,bcount,0);
+      delete temp;
+      bcount++;
+      wall++;
+    }
+    else
+      count = count/10;
+  }
+
+
+  in = box->clip(0, 0, height, ws_dx);
+  
+  delete box;
   delete zero;
   return screen;
 }
@@ -181,6 +208,7 @@ TetrisState Tetris::accept(char key, Matrix *in, Matrix **out) {
     Matrix *tempBlk = iScreen->clip(top, left, top + currBlk->get_dy(), left + currBlk->get_dx());
     Matrix *tempBlk2 = tempBlk->add(currBlk);
     delete tempBlk;
+    
 
     // update oScreen before conflict test
     oScreen->paste(iScreen, 0, 0);
@@ -270,12 +298,15 @@ TetrisState Tetris::accept(char key, Matrix *in, Matrix **out) {
     }
 
     // update oScreen
+    
+    Matrix * del = iScreen->clip(0,0,oScreen->get_dy(),oScreen->get_dx());
     oScreen->paste(iScreen, 0, 0);
     oScreen->paste(tempBlk2, top, left);
     delete tempBlk2;
 
     if (touchDown) {
-      oScreen = deleteFullLines(oScreen, currBlk, top, wallDepth,in,out);
+      oScreen = deleteFullLines(oScreen, currBlk, top, wallDepth,in,del);
+
       iScreen->paste(oScreen, 0, 0);
       state = TetrisState::NewBlock;
     }
